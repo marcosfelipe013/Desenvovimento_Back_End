@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {request} = require('express');
+const {request, response} = require('express');
 const {matchedData, check} = require('express-validator');
 const PortaoDeEmbarque = require('../model/portaodeembarque');
 const Voo = require('../model/Voo');
