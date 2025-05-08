@@ -2,19 +2,11 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const modelSchema = new mongoose.Schema({
-    nrmVoo:Number,
-    origem:String,
-    destino:String,
-    dataHrPartida:String,
-    portaoId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'portaodeembarque',
-        required: true
-    },
-    status: String
+    codigo: String,
+    disponivel:Boolean
 });
 
-const modelName = 'Voos';
+const modelName = 'portaodeembarque';
 
 if (mongoose.connection && mongoose.connection.models[modelName]) {
     module.exports = mongoose.connection.models[modelName];

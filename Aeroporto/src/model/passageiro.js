@@ -2,27 +2,17 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const modelSchema = new mongoose.Schema({
-    nome: {
-        type: String,
-        required: true
-    },
-    cpf: {
-        type: String,
-        required: true,
-        unique: true
-    },
+    nome:String,
+    cpf:String,
     vooId: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'voos',
         required: true
     },
-    statusCheckIn: {
-        type: String,
-        enum: ['Pendente', 'Concluído'],
-        default: "Pendente"
-    }
+    statusCheckIn: String
 });
 
-const modelName = 'Passageiros';
+const modelName = 'passageiros';
 
 if (mongoose.connection && mongoose.connection.models[modelName]) {
     module.exports = mongoose.connection.models[modelName];

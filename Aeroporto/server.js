@@ -1,14 +1,14 @@
-const mongoose = require ('mongoose');
-const express = require ('express');
-const cors = require ('cors');
+const mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config({path:'.env'});
 
-const apiRouters = require('./routers.js');
+const apiRouters = require('./src/routes/routers.js');
 
 mongoose.connect(process.env.DATABASE);
-mongoose.Promisse = global.Promisse;
+mongoose.Promise = global.Promise;
 mongoose.connection.on('error', (error) =>{
-    console.error("ERRO"+ error.menssage);
+    console.error("ERROR"+ error.message);
 });
 
 const server = express();
@@ -18,5 +18,5 @@ server.use(express.urlencoded({extended:true}));
 server.use("/", apiRouters);
 
 const servico = server.listen(process.env.PORT, () =>{
-    console.log("Servidor rodando na porta " + servico.address().port);
+    console.log("Servidor rodando na porta "+ servico.address().port);
 });

@@ -1,80 +1,60 @@
-const mongoose = require('mongoose');
-const {request} = require('express');
-const {matchedData} = require('express-validator');
-const Voo = require('../model/Voo');
+const { validationResult, matchedData } = require('express-validator');
+const { request, response } = require('express');
+const vooService = require('../service/vooService');
 
 module.exports = {
-    editVoo: async(request, response) => {
+    getAllVoos: async(request, response) => {
+        const voos = await vooService.getAllVoos();
+
+        return response.status(200).json({voos});
+    },
+    postVoo: async(request, response) => {
+        const erros = validationResult(request);
+
+        if (!erros.isEmpty()){
+            response.status(400).json({ error:erros.mapped() })
+        }
+
         const data = matchedData(request);
-        let updates = {};
 
-        if(data.nmrVoo) {
-            updates.nmrVoo = data.nmrVoo;
+        try {
+            const newVoo = await vooService.createVoo(data);
+            return response.status(201).json({ voo: newVoo });
+        } catch (error) {
+            return response.status(400).json({ error: error.message });
         }
-        if(data.origem) {
-            updates.origem = data.origem;
-        }
-        if(data.destino) {
-            updates.destino = data.destino;
-        }
-        if(data.dataHrPartida) {
-            updates.dataHrPartida = data.dataHrPartida;
-        }
-        if(data.portaoId) {
-            updates.portaoId = data.portaoId;
-        }
-        if(data.status) {
-            updates.status = data.status;
+    },
+    putVoo: async(request, response) => {
+        const erros = validationResult(request);
+
+        if (!erros.isEmpty()){
+            response.status(400).json({ error:erros.mapped() })
         }
 
-        await Voo.findByIdAndUpdate(data.id, updates, {new: true});
-        response.status(200).json({message: 'Voo atualizado com sucesso!'});
+        const data = matchedData(request);
+        const id = request.params.id;
+
+        try {
+            await vooService.putVoo(id, data);
+            return response.status(200).json({ sucess: true });
+        } catch (error) {
+            return response.status(400).json({ error: error.message });
+        }
     },
     deleteVoo: async(request, response) => {
-        const data = matchedData(request);
-        await Voo.findByIdAndDelete(data.id);
-        response.status(200).json({message: 'Voo deletado com sucesso!'});
-    },
-    getVoo: async(request, response) => {
-        const data = matchedData(request);
-        const voo = await Voo.findById(data.id);
-        if(!voo) {
-            response.status(400).json({message: 'Voo não encontrado!'});
-            return;
+        const erros = validationResult(request);
+
+        if (!erros.isEmpty()){
+            response.status(400).json({ error:erros.mapped() })
         }
-        response.status(200).json(voo);
-    },
-    getAllVoos: async(request, response) => {
-        const voos = await Voo.find();
+        
+        const id = request.params.id;
 
-        if(!voos) {
-            response.status(400).json({message: 'Nenhum voo encontrado!'});
-            return;
+        try {
+            await vooService.deleteVoo(id);
+            return response.status(200).json({ sucess: true });
+        } catch (error) {
+            return response.status(400).json({ error: error.message });
         }
-        response.status(200).json(voos);
-    },
-    updateStatus: async(request, response) => {
-        const data = matchedData(request);
-        const voo = await Voo.findById(data.id);
-
-        if(!voo) {
-            response.status(400).json({message: 'Voo não encontrado!'});
-            return;
-        }
-
-        voo.status = data.status;
-        await voo.save();
-        response.status(200).json({message: 'Status do voo atualizado com sucesso!'});
-    },
-    getPassageiros: async(request, response) => {
-        const data = matchedData(request);
-        const voo = await Voo.findById(data.id).populate('passageiros');
-
-        if(!voo) {
-            response.status(400).json({message: 'Voo não encontrado!'});
-            return;
-        }
-
-        response.status(200).json(voo.passageiros);
     }
 };
