@@ -19,7 +19,7 @@ module.exports = {
 
         try {
             const newVoo = await vooService.createVoo(data);
-            return response.status(201).json({ voo: newVoo });
+            return response.status(200).json({ voo: newVoo });
         } catch (error) {
             return response.status(400).json({ error: error.message });
         }

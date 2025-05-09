@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const modelSchema = new mongoose.Schema({
-    nrmVoo:Number,
+    nmrVoo:Number,
     origem:String,
     destino:String,
     dataHrPartida:String,

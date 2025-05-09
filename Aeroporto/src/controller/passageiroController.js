@@ -1,7 +1,6 @@
 const { validationResult, matchedData } = require('express-validator');
 const { request, response } = require('express');
 const passageiroService = require('../service/passageiroService');
-const { get } = require('mongoose');
 
 module.exports = {
     getAllPassageiros: async(request, response) => {
@@ -20,7 +19,7 @@ module.exports = {
 
         try {
             const newPassageiro = await passageiroService.createPassageiro(data);
-            return response.status(201).json({ passageiro: newPassageiro });
+            return response.status(200).json({ passageiro: newPassageiro });
         } catch (error) {
             return response.status(400).json({ error: error.message });
         }

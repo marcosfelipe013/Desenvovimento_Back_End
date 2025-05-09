@@ -7,6 +7,9 @@ module.exports = {
     findPortaoDeEmbarqueById: async(id) =>{
         return await portaoDeEmbarque.findById(id);
     },
+    findPortaoDeEmbarqueByCodigo: async(codigo) =>{
+        return await portaoDeEmbarque.findOne({codigo});
+    },
     createPortaoDeEmbarque: async(data) =>{
         const newPortaoDeEmbarque = new portaoDeEmbarque(data);
         return await newPortaoDeEmbarque.save();

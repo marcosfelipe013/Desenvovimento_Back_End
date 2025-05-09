@@ -32,22 +32,12 @@ module.exports = {
     },
     cpf: {
       optional: true,
-      errorMessage: 'CPF Obrigatório'
     },
     vooId: {
       optional: true,
-      errorMessage: 'vooId não pode ser vazio'
     },
     statusCheckIn: {
-      optional: true,
-      custom: {
-        options: (value) => {
-          if (value !== 'realizado') {
-            throw new Error('statusCheckIn só pode ser "realizado"');
-          }
-          return true;
-        }
-      }
+      optional: true
     }
   })
 };

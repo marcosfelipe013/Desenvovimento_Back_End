@@ -1,10 +1,8 @@
 const { checkSchema } = require('express-validator');
 
-const validStatuses = ['programado', 'embarque', 'concluido'];
-
 module.exports = {
   postVooAction: checkSchema({
-    nrmVoo: {
+    nmrVoo: {
       notEmpty: true,
       trim: true
     },
@@ -22,28 +20,32 @@ module.exports = {
     portaoId: {
       notEmpty: true,
       errorMessage: 'portaoId é obrigatório'
+    },
+    status: {
+      notEmpty: true,
+      errorMessage: 'Status Deve ser obrigatório'
     }
   }),
 
   editVooAction: checkSchema({
-    nrmVoo: {
+    nmrVoo: {
       optional: true,
       trim: true
     },
     origem: {
       optional: true,
-      errorMessage: 'Origem obrigatória'
     },
     destino: {
       optional: true,
-      errorMessage: 'Destino obrigatório'
     },
     dataHrPartida: {
       optional: true
     },
     portaoId: {
       optional: true,
-      errorMessage: 'portaoId é obrigatório'
+    },
+    status: {
+      optional: true
     }
   })
 };

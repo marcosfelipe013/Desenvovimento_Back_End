@@ -51,15 +51,12 @@ module.exports = {
         if (!voo){
             throw new Error('Voo não encontrado!')
         }
-        if (voo.status !== 'Embarque'){
-            throw new Error('Voo não está em embarque!')
-        }
 
         const passageiroData = {
             nome: data.nome,
             cpf: data.cpf,
             vooId: data.vooId,
-            statusCheckIn: 'pendente'
+            statusCheckIn: data.statusCheckIn
         }
 
         return await passageiroRepository.createPassageiro(passageiroData);
@@ -67,35 +64,64 @@ module.exports = {
     putPassageiro: async(id, data) =>{
         const updates = {};
 
-        if (data.nome) updates.nome = data.nome;
 
-        const cpfCheck = await passageiroRepository.findPassageiroByCpf(data.cpf);
-
-        if (cpfCheck && cpfCheck._id.toString() !== id){
-            throw new Error('Passageiro já cadastrado!')
-        }
-
-        const cpfValidator = validarCPF(data.cpf);
-
-        if (!cpfValidator) {
-            throw new Error('CPF inválido!')
+        if (data.nome) {
+            updates.nome = data.nome;
         }
 
         if (data.cpf) {
+            const cpfCheck = await passageiroRepository.findPassageiroByCpf(data.cpf);
+
+            if (cpfCheck && cpfCheck._id.toString() !== id){
+                throw new Error('Passageiro já cadastrado!')
+            }
+            
+            const cpfValidator = validarCPF(data.cpf);
+
+            if (!cpfValidator) {
+                throw new Error('CPF inválido!')
+            }
+            
             updates.cpf = data.cpf;
-        } 
+        }
+        
         if (data.vooId) {
+            const vooCheck = await vooRepository.findVooById(data.vooId);
+
+            if (!vooCheck) {
+                throw new Error('Voo não encontrado!')
+            }
+
             updates.vooId = data.vooId;
         }
 
         if (data.statusCheckIn) {
-            if (data.statusCheckIn !== 'realizado') {
-              throw new Error('StatusCheckIn só pode ser "realizado" na edição');
-            }
-            updates.statusCheckIn = data.statusCheckIn;
-          }
+            let voo;
 
-        return await passageiroRepository.deletePassageiroById(id, updates);
+            if (!data.vooId) {
+                const passageiro = await passageiroRepository.findPassageiroById(id);
+                
+                if (!passageiro) {
+                    throw new Error('Passageiro não encontrado!')
+                }
+
+                voo = await vooRepository.findVooById(passageiro.vooId);
+            } else {
+                voo = await vooRepository.findVooById(data.vooId);
+            }
+
+            if (!voo) {
+                throw new Error('Voo não encontrado!');
+            }
+
+            if (voo.status !== 'embarque'){
+                throw new Error('Voo tem que estar com o Status de Embarque!');
+            }
+
+            updates.statusCheckIn = data.statusCheckIn;
+        }
+
+        return await passageiroRepository.editPassageiroById(id, updates);
     },
     deletePassageiro: async(id) =>{
         const passageiro = await passageiroRepository.findPassageiroById(id);

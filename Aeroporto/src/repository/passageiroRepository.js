@@ -13,25 +13,10 @@ module.exports = {
     createPassageiro: async(data) =>{
         const newPassageiro = new Passageiro(data);
 
-
         return await newPassageiro.save();
     },
     editPassageiroById: async(id, data) =>{
         return await Passageiro.findByIdAndUpdate(id, {$set:data}, {new:true});
-    },
-    updateCheckInStatusByVooId: async (vooId, statusVoo) => {
-        let novoStatusCheckIn;
-    
-        if (statusVoo === 'embarque') {
-            novoStatusCheckIn = 'liberado';
-        } else {
-            novoStatusCheckIn = 'bloqueado';
-        }
-    
-        await Passageiro.updateMany(
-            { vooId },
-            { $set: { statusCheckIn: novoStatusCheckIn } }
-        );
     },
     deletePassageiroById: async(id) =>{
         return await Passageiro.findByIdAndDelete(id);

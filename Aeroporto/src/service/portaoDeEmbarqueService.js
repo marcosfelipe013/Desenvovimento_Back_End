@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const portaoDeEmbarqueRepository = require('../repository/portaoDeEmbarqueRepository');
-const vooRepository = require('../repository/vooRepository');
 
 module.exports = {
     getAllPortaoDeEmbarque: async() =>{
@@ -9,6 +8,12 @@ module.exports = {
         return portaoDeEmbarque;
     },
     createPortaoDeEmbarque: async(data) =>{
+        const codigoCheck = await portaoDeEmbarqueRepository.findPortaoDeEmbarqueByCodigo(data.codigo);
+
+        if (codigoCheck) {
+            throw new Error('Este Portão já está cadastrado!')
+        }
+
         const portaoDeEmbarqueData = {
             codigo: data.codigo,
             disponivel: data.disponivel
@@ -22,10 +27,12 @@ module.exports = {
         if (data.codigo) {
             updates.codigo = data.codigo;
         }
+
         if (data.status) {
             updates.status = data.status;
         }
-        if (data.disponivel !== undefined) {
+
+        if (data.disponivel) {
             updates.disponivel = data.disponivel;
         }
 
