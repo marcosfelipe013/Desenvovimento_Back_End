@@ -96,28 +96,30 @@ module.exports = {
         }
 
         if (data.statusCheckIn) {
-            let voo;
+            if (data.statusCheckIn == 'realizado') {
+                let voo;
 
-            if (!data.vooId) {
-                const passageiro = await passageiroRepository.findPassageiroById(id);
-                
-                if (!passageiro) {
-                    throw new Error('Passageiro não encontrado!')
+                if (!data.vooId) {
+                    const passageiro = await passageiroRepository.findPassageiroById(id);
+                    
+                    if (!passageiro) {
+                        throw new Error('Passageiro não encontrado!')
+                    }
+
+                    voo = await vooRepository.findVooById(passageiro.vooId);
+                } else {
+                    voo = await vooRepository.findVooById(data.vooId);
                 }
 
-                voo = await vooRepository.findVooById(passageiro.vooId);
-            } else {
-                voo = await vooRepository.findVooById(data.vooId);
-            }
+                if (!voo) {
+                    throw new Error('Voo não encontrado!');
+                }
 
-            if (!voo) {
-                throw new Error('Voo não encontrado!');
+                if (voo.status !== 'embarque'){
+                    throw new Error('Voo tem que estar com o Status de Embarque!');
+                }
             }
-
-            if (voo.status !== 'embarque'){
-                throw new Error('Voo tem que estar com o Status de Embarque!');
-            }
-
+            
             updates.statusCheckIn = data.statusCheckIn;
         }
 

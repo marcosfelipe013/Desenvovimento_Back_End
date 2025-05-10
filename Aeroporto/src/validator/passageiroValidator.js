@@ -18,7 +18,10 @@ module.exports = {
       notEmpty: true,
       errorMessage: 'vooId é obrigatório'
     },
-
+    statusCheckIn: {
+      notEmpty: true,
+      errorMessage: 'StatusCheckIn é obrigatório'
+    }
   }),
 
   editPassageiroAction: checkSchema({
