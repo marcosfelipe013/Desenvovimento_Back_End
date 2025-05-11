@@ -15,8 +15,7 @@ module.exports = {
       errorMessage: 'CPF Obrigatório'
     },
     vooId: {
-      notEmpty: true,
-      errorMessage: 'vooId é obrigatório'
+      notEmpty: false
     },
     statusCheckIn: {
       notEmpty: true,

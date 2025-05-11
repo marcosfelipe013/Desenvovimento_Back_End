@@ -5,7 +5,7 @@ const modelSchema = new mongoose.Schema({
     nmrVoo:Number,
     origem:String,
     destino:String,
-    dataHrPartida:String,
+    dataHrPartida:Date,
     portaoId: {
         type: mongoose.Schema.ObjectId,
         ref: 'portaodeembarque',

@@ -8,6 +8,24 @@ module.exports = {
 
         return voos;
     },
+    getAllVoosByDia: async(data) =>{
+        const [ano, mes, dia] = data.split('-').map(Number);
+
+        if (!ano || !mes || !dia) {
+            throw new Error('Data inválida!')
+        }
+
+        const inicioDia = new Date(Date.UTC(ano, mes - 1, dia, 0, 0, 0));
+        const fimDia = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999));
+
+        const voos = await vooRepository.findAllVoosByDia(inicioDia, fimDia);
+
+        if(!voos || voos.length === 0){
+            throw new Erro('Nenhum voo encontrado!')
+        }
+
+        return voos;
+    },
     createVoo: async(data) =>{
         const portao = await portaoDeEmbarqueRepository.findPortaoDeEmbarqueById(data.portaoId);
         

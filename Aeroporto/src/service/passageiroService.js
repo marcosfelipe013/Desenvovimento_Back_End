@@ -34,6 +34,29 @@ module.exports = {
 
         return passageiros;
     },
+    getAllPassageirosByVoo: async(vooId) => {
+        const vooCheck = await vooRepository.findVooById(vooId);
+
+        if (!vooCheck) {
+            throw new Error('Voo não encontrado!')
+        }
+        
+        const passageiros = await passageiroRepository.findAllPassageiosByVoo(vooId)
+
+        if(!passageiros || passageiros.length === 0){
+            throw new Error('Nenhum passageiro encontrado para este voo')
+        }
+        return passageiros;
+    },
+    getAllPassageirosByNomeAndStatusCheckIn: async() =>{
+        const passageiros = await passageiroRepository.findAllPassageirosByNomeAndStatusCheckIn();
+
+        if(!passageiros || passageiros.length === 0) {
+            throw new Error('Nenhum passageiro encontrado!')
+        }
+
+        return passageiros;
+    },
     createPassageiro: async(data) =>{
         const cpfCheck = await passageiroRepository.findPassageiroByCpf(data.cpf);
 
@@ -48,8 +71,13 @@ module.exports = {
         }
 
         const voo = await vooRepository.findVooById(data.vooId);
+
         if (!voo){
             throw new Error('Voo não encontrado!')
+        }
+
+        if(voo.status == 'concluido') {
+            throw new Error('Voo já concluido, não podendo mais adicionar usuários a este voo!')
         }
 
         const passageiroData = {

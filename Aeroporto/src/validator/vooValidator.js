@@ -4,7 +4,8 @@ module.exports = {
   postVooAction: checkSchema({
     nmrVoo: {
       notEmpty: true,
-      trim: true
+      trim: true,
+      errorMessage: 'Número do Voo é obrigatório'
     },
     origem: {
       notEmpty: true,
@@ -16,6 +17,7 @@ module.exports = {
     },
     dataHrPartida: {
       notEmpty: true,
+      errorMessage: 'Data é obrigatório'
     },
     portaoId: {
       notEmpty: true,
@@ -33,16 +35,16 @@ module.exports = {
       trim: true
     },
     origem: {
-      optional: true,
+      optional: true
     },
     destino: {
-      optional: true,
+      optional: true
     },
     dataHrPartida: {
       optional: true
     },
     portaoId: {
-      optional: true,
+      optional: true
     },
     status: {
       optional: true

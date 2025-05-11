@@ -8,6 +8,22 @@ module.exports = {
 
         return response.status(200).json({voos});
     },
+    getVoosByDia: async(request, response) =>{
+        const erros = validationResult(request);
+
+        if (!erros.isEmpty()){
+            response.status(400).json({ error:erros.mapped() })
+        }
+
+        const data = request.params.data;
+
+        try {
+            const voosByDia = await vooService.getAllVoosByDia(data);
+            return response.status(200).json({ voosByDia: voosByDia });
+        } catch (error) {
+            return response.status(400).json({ error: error.message });
+        }
+    },
     postVoo: async(request, response) => {
         const erros = validationResult(request);
 
