@@ -16,3 +16,4 @@ Este é um projeto de **back-end** para o gerenciamento de um aeroporto, desenvo
 - Registro de **passageiros**
 - Associação entre voos e passageiros
 - Operações CRUD completas com validações
+- Sistem de login para usuarios e administradores onde sao todos criptografados e autenticados
