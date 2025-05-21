@@ -37,7 +37,7 @@ module.exports = {
             throw new Error('Portão não está disponível.');
         }
 
-        const vooCheck = await vooRepository.findVooById(data.vooId);
+        const vooCheck = await vooRepository.findVooByNmrVoo(data.nmrVoo);
 
         if (vooCheck) {
             throw new Error('Este voo já está cadastrado!');

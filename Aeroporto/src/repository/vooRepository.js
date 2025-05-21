@@ -4,6 +4,9 @@ module.exports = {
     findAllVoos: async() =>{
         return await Voo.find();
     },
+    findVooByNmrVoo: async(nmrVoo) =>{
+        return await Voo.findOne({nmrVoo})
+    },
     findVooById: async(id) =>{
         return await Voo.findById(id);
     },
